@@ -93,7 +93,6 @@ def depthFirstSearch(problem):
 
 def breadthFirstSearch(problem):
     """Search the shallowest nodes in the search tree first."""
-    "*** YOUR CODE HERE ***"
 
     # queue structure: a list of tuples
     # tuple structure: (state, list representing path to state)

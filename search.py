@@ -18,6 +18,7 @@ Pacman agents (in searchAgents.py).
 """
 
 import util
+from util import *
 
 class SearchProblem:
     """
@@ -81,18 +82,59 @@ def depthFirstSearch(problem):
 
     To get started, you might want to try some of these simple commands to
     understand the search problem that is being passed in:
+    """
+    "*** YOUR CODE HERE ***"
 
     print("Start:", problem.getStartState())
     print("Is the start a goal?", problem.isGoalState(problem.getStartState()))
     print("Start's successors:", problem.getSuccessors(problem.getStartState()))
-    """
-    "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+
+    # util.raiseNotDefined()
 
 def breadthFirstSearch(problem):
     """Search the shallowest nodes in the search tree first."""
     "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+
+    queue = Queue()
+
+    statesVisited = []
+    result = []
+
+    # Base Case
+    if problem.isGoalState(problem.getStartState()):
+        return result
+
+    queue.push(problem.getStartState())
+
+    while not queue.isEmpty():
+
+        # grab the next set of node data
+        xyCoords, currNode, _ = queue.pop()
+
+        # list of xy coords visited
+        statesVisited.append(xyCoords)
+
+        result.append(currNode)
+
+        # if we have found a solution then return
+        if problem.isGoalState(xyCoords):
+            return result
+        
+        # now get a list of successors
+        succs = problem.getSuccessors(currNode)
+
+        # if there are successors
+        if succs:
+            # for every successor found
+            for succ in succs:
+                # use successor coords to check against list of visited coords
+                if succ[0] not in statesVisited:
+                    if succ not in queue.list:
+                        # concatResult = result + succ[1]
+                        # result += n
+                        queue.push(succ[1])
+
+    # util.raiseNotDefined()
 
 def uniformCostSearch(problem):
     """Search the node of least total cost first."""

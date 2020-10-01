@@ -95,30 +95,31 @@ def breadthFirstSearch(problem):
     """Search the shallowest nodes in the search tree first."""
     "*** YOUR CODE HERE ***"
 
+    # queue structure: a list of tuples
+    # tuple structure: (state, list representing path to state)
     queue = Queue()
 
-    statesVisited = []
-    result = []
+    statesVisited = [] # a list of states visited
+    resultPath = []        # path to state
 
     # Base Case
     if problem.isGoalState(problem.getStartState()):
-        return result
+        return resultPath
 
-    queue.push(problem.getStartState())
+    # queue will contain currentNode and currentPath to that node
+    queue.push((problem.getStartState(), []))
 
     while not queue.isEmpty():
 
         # grab the next set of node data
-        xyCoords, currNode, _ = queue.pop()
+        currNode, resultPath = queue.pop()
 
-        # list of xy coords visited
-        statesVisited.append(xyCoords)
-
-        result.append(currNode)
+        # list of nodes visited
+        statesVisited.append(currNode)
 
         # if we have found a solution then return
-        if problem.isGoalState(xyCoords):
-            return result
+        if problem.isGoalState(currNode):
+            return resultPath
         
         # now get a list of successors
         succs = problem.getSuccessors(currNode)
@@ -126,13 +127,15 @@ def breadthFirstSearch(problem):
         # if there are successors
         if succs:
             # for every successor found
-            for succ in succs:
+            for succNode in succs:
                 # use successor coords to check against list of visited coords
-                if succ[0] not in statesVisited:
-                    if succ not in queue.list:
-                        # concatResult = result + succ[1]
-                        # result += n
-                        queue.push(succ[1])
+                if succNode[0] not in statesVisited:
+                    if succNode not in queue.list:
+                        newResult = resultPath + [succNode[1]]
+                        queue.push((succNode[0], newResult))
+    
+    # return empty list if now path is found && queue isEmpty()
+    return []
 
     # util.raiseNotDefined()
 

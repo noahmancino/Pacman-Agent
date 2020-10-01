@@ -100,7 +100,7 @@ def breadthFirstSearch(problem):
     queue = Queue()
 
     statesVisited = [] # a list of states visited
-    resultPath = []        # path to state
+    resultPath = []    # path to state
 
     # Base Case
     if problem.isGoalState(problem.getStartState()):
@@ -109,6 +109,7 @@ def breadthFirstSearch(problem):
     # queue will contain currentNode and currentPath to that node
     queue.push((problem.getStartState(), []))
 
+    # continue itterating till queue of nodes is empty or goal is reached
     while not queue.isEmpty():
 
         # grab the next set of node data

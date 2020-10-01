@@ -17,8 +17,9 @@ In search.py, you will implement generic search algorithms which are called by
 Pacman agents (in searchAgents.py).
 """
 
-import util
 from util import *
+from game import Directions
+
 
 class SearchProblem:
     """
@@ -82,9 +83,12 @@ def depthFirstSearch(problem):
 
     To get started, you might want to try some of these simple commands to
     understand the search problem that is being passed in:
+
+    print("Start:", problem.getStartState())
+    print("Is the start a goal?", problem.isGoalState(problem.getStartState()))
+    print("Start's successors:", problem.getSuccessors(problem.getStartState()))
     """
     "*** YOUR CODE HERE ***"
-
     visited = set()
     path = Stack()
     directions = []
@@ -121,51 +125,8 @@ def depthFirstSearch(problem):
 
 def breadthFirstSearch(problem):
     """Search the shallowest nodes in the search tree first."""
-
-    # queue structure: a list of tuples
-    # tuple structure: (state, list representing path to state)
-    queue = Queue()
-
-    statesVisited = [] # a list of states visited
-    resultPath = []    # path to state
-
-    # Base Case
-    if problem.isGoalState(problem.getStartState()):
-        return resultPath
-
-    # queue will contain currentNode and currentPath to that node
-    queue.push((problem.getStartState(), []))
-
-    # continue itterating till queue of nodes is empty or goal is reached
-    while not queue.isEmpty():
-
-        # grab the next set of node data
-        currNode, resultPath = queue.pop()
-
-        # list of nodes visited
-        statesVisited.append(currNode)
-
-        # if we have found a solution then return
-        if problem.isGoalState(currNode):
-            return resultPath
-        
-        # now get a list of successors
-        succs = problem.getSuccessors(currNode)
-
-        # if there are successors
-        if succs:
-            # for every successor found
-            for succNode in succs:
-                # use successor coords to check against list of visited coords
-                if succNode[0] not in statesVisited:
-                    if succNode not in queue.list:
-                        newResult = resultPath + [succNode[1]]
-                        queue.push((succNode[0], newResult))
-    
-    # return empty list if now path is found && queue isEmpty()
-    return []
-
-    # util.raiseNotDefined()
+    "*** YOUR CODE HERE ***"
+    util.raiseNotDefined()
 
 def uniformCostSearch(problem):
     """Search the node of least total cost first."""

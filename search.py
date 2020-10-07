@@ -129,12 +129,12 @@ def breadthFirstSearch(problem):
     statesVisited = [] # a list of states visited
     resultPath = []    # path to state
 
+    # queue will contain currentNode and currentPath to that node
+    queue.push((problem.getStartState(), []))
+
     # Base Case
     if problem.isGoalState(problem.getStartState()):
         return resultPath
-
-    # queue will contain currentNode and currentPath to that node
-    queue.push((problem.getStartState(), []))
 
     # continue itterating till queue of nodes is empty or goal is reached
     while not queue.isEmpty():
@@ -162,7 +162,7 @@ def breadthFirstSearch(problem):
                         newResult = resultPath + [succNode[1]]
                         queue.push((succNode[0], newResult))
     
-    # return empty list if now path is found && queue isEmpty()
+    # return empty list if no new path is found && queue isEmpty()
     return []
 
     # util.raiseNotDefined()
@@ -170,7 +170,15 @@ def breadthFirstSearch(problem):
 def uniformCostSearch(problem):
     """Search the node of least total cost first."""
     "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+
+    # priority queue to implement uniform cost search
+    pQueue = PriorityQueue()
+
+    if (problem.isGoalState()):
+        return problem.getStartState()
+
+    # returns empty if nothing found
+    return []
 
 def nullHeuristic(state, problem=None):
     """

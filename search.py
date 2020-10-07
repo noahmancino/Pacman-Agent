@@ -129,27 +129,25 @@ def breadthFirstSearch(problem):
     statesVisited = [] # a list of states visited
     resultPath = []    # path to state
 
-    resultPath.append(problem.getStartState())
-
     # Base Case
     if problem.isGoalState(problem.getStartState()):
-        return resultPath
+        return []
 
     # queue will contain currentNode and currentPath to that node
-    queue.push((problem.getStartState(), []))
+    queue.push((problem.getStartState(), resultPath))
 
     # continue itterating till queue of nodes is empty or goal is reached
     while not queue.isEmpty():
 
         # grab the next set of node data
-        currNode, resultPath = queue.pop()
+        currNode, currPath = queue.pop()
 
         # list of nodes visited
         statesVisited.append(currNode)
 
         # if we have found a solution then return
         if problem.isGoalState(currNode):
-            return resultPath
+            return currPath
         
         # now get a list of successors
         succs = problem.getSuccessors(currNode)
@@ -161,7 +159,7 @@ def breadthFirstSearch(problem):
                 # use successor coords to check against list of visited coords
                 if succNode[0] not in statesVisited:
                     if succNode not in queue.list:
-                        newResult = resultPath + [succNode[1]]
+                        newResult = currPath + [succNode[1]]
                         queue.push((succNode[0], newResult))
     
     # return empty list if no new path is found && queue isEmpty()
@@ -171,15 +169,38 @@ def breadthFirstSearch(problem):
 
 def uniformCostSearch(problem):
     """Search the node of least total cost first."""
-    "*** YOUR CODE HERE ***"
 
     # priority queue to implement uniform cost search
     pQueue = PriorityQueue()
 
+    statesVisited = []
     resultPath = []
 
-    if (problem.isGoalState(problem.getStartState)):
-        return problem.getStartState()
+    # if start state is goal state then return
+    if (problem.isGoalState(problem.getStartState())):
+        return []
+
+    # initialize the priority queue
+    pQueue.push((problem.getStartState(), resultPath), 0)
+
+    while not pQueue.isEmpty():
+
+        currState, currResult = pQueue.pop()
+        statesVisited.append(currState)
+
+        # if goal state is reached, return path to goal state
+        if problem.isGoalState(currState):
+            return currResult
+        
+        successors = problem.getSuccessors(currState[0])
+
+        if successors:
+            for succ in successors:
+                if succ[0] not in statesVisited:
+                    if succ not in pQueue.heap:
+                        newResult = currResult + [succ[1]]
+                        pQueue.push((succ[0], newResult), 0)
+
 
     # returns empty if nothing found
     return []

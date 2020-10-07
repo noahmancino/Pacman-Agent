@@ -129,12 +129,14 @@ def breadthFirstSearch(problem):
     statesVisited = [] # a list of states visited
     resultPath = []    # path to state
 
-    # queue will contain currentNode and currentPath to that node
-    queue.push((problem.getStartState(), []))
+    resultPath.append(problem.getStartState())
 
     # Base Case
     if problem.isGoalState(problem.getStartState()):
         return resultPath
+
+    # queue will contain currentNode and currentPath to that node
+    queue.push((problem.getStartState(), []))
 
     # continue itterating till queue of nodes is empty or goal is reached
     while not queue.isEmpty():
@@ -174,7 +176,9 @@ def uniformCostSearch(problem):
     # priority queue to implement uniform cost search
     pQueue = PriorityQueue()
 
-    if (problem.isGoalState()):
+    resultPath = []
+
+    if (problem.isGoalState(problem.getStartState)):
         return problem.getStartState()
 
     # returns empty if nothing found

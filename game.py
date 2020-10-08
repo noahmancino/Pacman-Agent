@@ -59,7 +59,7 @@ class Directions:
                    WEST:  SOUTH,
                    STOP:  STOP}
 
-    RIGHT =      dict([(y,x) for x, y in LEFT.items()])
+    RIGHT = dict([(y,x) for x, y in LEFT.items()])
 
     REVERSE = {NORTH: SOUTH,
                SOUTH: NORTH,

@@ -302,7 +302,6 @@ class CornersProblem(search.SearchProblem):
         """
         "*** YOUR CODE HERE ***"
         return set(self.corners).issubset(set(state))
-        # util.raiseNotDefined()
 
     def getSuccessors(self, state):
         """
@@ -319,19 +318,14 @@ class CornersProblem(search.SearchProblem):
         for action in [Directions.NORTH, Directions.SOUTH, Directions.EAST, Directions.WEST]:
             # Add a successor state to the successor list if the action is legal
             # Here's a code snippet for figuring out whether a new position hits a wall:
-            #   x,y = currentPosition
-            #   dx, dy = Actions.directionToVector(action)
-            #   nextx, nexty = int(x + dx), int(y + dy)
-            #   hitsWall = self.walls[nextx][nexty]
-            x, y = state
-            dx, dy = Actions.directionToVector(action)
-            nexty, nextx = int(x + dx), int(y + dy)
-            if not self.walls[nextx][nexty]:
-                nextPos = (nextx, nexty)
-                cost = 1
-                successors.append( (nextPos, action, cost) )
+                x,y = state
+                dx, dy = Actions.directionToVector(action)
+                nextx, nexty = int(x + dx), int(y + dy)
+                hitsWall = self.walls[nextx][nexty]
+                if not hitsWall:
+                    successors.append(((nextx, nexty), action, 1))
 
-        self._expanded += 1 # DO NOT CHANGE
+        self._expanded += 1  # DO NOT CHANGE
         return successors
 
     def getCostOfActions(self, actions):

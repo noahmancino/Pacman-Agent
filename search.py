@@ -119,6 +119,7 @@ def depthFirstSearch(problem):
 
     # util.raiseNotDefined()
 
+
 def breadthFirstSearch(problem):
     """Search the shallowest nodes in the search tree first."""
 
@@ -167,43 +168,29 @@ def breadthFirstSearch(problem):
 
     # util.raiseNotDefined()
 
+
 def uniformCostSearch(problem):
     """Search the node of least total cost first."""
+    # queue holds a tuple containing the node, the path taken to the node, and the cost to get to the node on that path.
+    # it also holds a priority (annoyingly, the same as the third element of the tuple). Min-heap, not max. 
+    queue = PriorityQueue()
+    queue.push((problem.getStartState(), [], 0), 0)
+    # We don't need to bother looking at nodes we've already pulled out of the queue, we are guaranteed to have
+    # taken the best path to it already.
+    visited = set()
 
-    # priority queue to implement uniform cost search
-    pQueue = PriorityQueue()
+    while not queue.isEmpty():
+        current, path, cost = queue.pop()
+        visited.add(current)
+        if problem.isGoalState(current):
+            return path
 
-    statesVisited = []
-    resultPath = []
+        for neighbor in problem.getSuccessors(current):
+            if neighbor[0] not in visited:
+                queue.update((neighbor[0], path + [neighbor[1]], cost + neighbor[2]), cost + neighbor[2])
 
-    # if start state is goal state then return
-    if (problem.isGoalState(problem.getStartState())):
-        return []
-
-    # initialize the priority queue
-    pQueue.push((problem.getStartState(), resultPath), 0)
-
-    while not pQueue.isEmpty():
-
-        currState, currResult = pQueue.pop()
-        statesVisited.append(currState)
-
-        # if goal state is reached, return path to goal state
-        if problem.isGoalState(currState):
-            return currResult
-        
-        successors = problem.getSuccessors(currState[0])
-
-        if successors:
-            for succ in successors:
-                if succ[0] not in statesVisited:
-                    if succ not in pQueue.heap:
-                        newResult = currResult + [succ[1]]
-                        pQueue.push((succ[0], newResult), 0)
-
-
-    # returns empty if nothing found
     return []
+
 
 def nullHeuristic(state, problem=None):
     """
@@ -211,6 +198,7 @@ def nullHeuristic(state, problem=None):
     goal in the provided SearchProblem.  This heuristic is trivial.
     """
     return 0
+
 
 def aStarSearch(problem, heuristic=nullHeuristic):
     """Search the node that has the lowest combined cost and heuristic first."""

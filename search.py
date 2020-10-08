@@ -172,7 +172,7 @@ def breadthFirstSearch(problem):
 def uniformCostSearch(problem):
     """Search the node of least total cost first."""
     # queue holds a tuple containing the node, the path taken to the node, and the cost to get to the node on that path.
-    # it also holds a priority (annoyingly, the same as the third element of the tuple). Min-heap, not max. 
+    # it also holds a priority (annoyingly, the same as the third element of the tuple). Min-heap, not max.
     queue = PriorityQueue()
     queue.push((problem.getStartState(), [], 0), 0)
     # We don't need to bother looking at nodes we've already pulled out of the queue, we are guaranteed to have
@@ -203,7 +203,27 @@ def nullHeuristic(state, problem=None):
 def aStarSearch(problem, heuristic=nullHeuristic):
     """Search the node that has the lowest combined cost and heuristic first."""
     "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    # queue holds a tuple containing the node, the path taken to the node, and the cost to get to the node on that path.
+    # it also holds a priority, which is path cost plus the heuristic. Min-heap, not max.
+    queue = PriorityQueue()
+    current = problem.getStartState()
+    queue.push((current, [], 0), heuristic(current, problem))
+    # We don't need to bother looking at nodes we've already pulled out of the queue, we are guaranteed to have
+    # taken the best path to it already.
+    visited = set()
+
+    while not queue.isEmpty():
+        current, path, cost = queue.pop()
+        visited.add(current)
+        if problem.isGoalState(current):
+            return path
+
+        for neighbor in problem.getSuccessors(current):
+            if neighbor[0] not in visited:
+                queue.update((neighbor[0], path + [neighbor[1]], cost + neighbor[2]),
+                             cost + neighbor[2] + heuristic(neighbor[0], problem))
+
+    return []
 
 
 # Abbreviations

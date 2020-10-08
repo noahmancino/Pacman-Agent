@@ -192,15 +192,14 @@ def uniformCostSearch(problem):
         if problem.isGoalState(currState):
             return currResult
         
-        successors = problem.getSuccessors(currState[0])
+        successors = problem.getSuccessors(currState)
 
         if successors:
             for succ in successors:
                 if succ[0] not in statesVisited:
                     if succ not in pQueue.heap:
                         newResult = currResult + [succ[1]]
-                        pQueue.push((succ[0], newResult), 0)
-
+                        pQueue.update((succ[0], newResult), succ[2])
 
     # returns empty if nothing found
     return []

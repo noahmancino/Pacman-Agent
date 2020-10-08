@@ -166,9 +166,6 @@ def breadthFirstSearch(problem):
     # return empty list if no new path is found && queue isEmpty()
     return []
 
-    # util.raiseNotDefined()
-
-
 def uniformCostSearch(problem):
     """Search the node of least total cost first."""
     # queue holds a tuple containing the node, the path taken to the node, and the cost to get to the node on that path.
@@ -190,7 +187,6 @@ def uniformCostSearch(problem):
                 queue.update((neighbor[0], path + [neighbor[1]], cost + neighbor[2]), cost + neighbor[2])
 
     return []
-
 
 def nullHeuristic(state, problem=None):
     """

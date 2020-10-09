@@ -294,14 +294,19 @@ class CornersProblem(search.SearchProblem):
         Returns the start state (in your state space, not the full Pacman state
         space)
         """
-        return self.startingPosition
+        cornersDict = {}
+        for corner in self.corners:
+            if corner == self.startingPosition:
+                cornersDict[corner] = True
+            else:
+                cornersDict[corner] = False
+
+        return [self.startingPosition, cornersDict]
 
     def isGoalState(self, state):
-        """
-        Returns whether this search state is a goal state of the problem.
-        """
-        "*** YOUR CODE HERE ***"
-        return set(self.corners).issubset(set(state))
+        # If all the values in the corners dictionary are true we have visited every corner.
+        corners = state[1]
+        return all(corners.values())
 
     def getSuccessors(self, state):
         """
@@ -318,12 +323,16 @@ class CornersProblem(search.SearchProblem):
         for action in [Directions.NORTH, Directions.SOUTH, Directions.EAST, Directions.WEST]:
             # Add a successor state to the successor list if the action is legal
             # Here's a code snippet for figuring out whether a new position hits a wall:
-                x,y = state
-                dx, dy = Actions.directionToVector(action)
-                nextx, nexty = int(x + dx), int(y + dy)
-                hitsWall = self.walls[nextx][nexty]
-                if not hitsWall:
-                    successors.append(((nextx, nexty), action, 1))
+            cords, corners = state
+            dx, dy = Actions.directionToVector(action)
+            nextCords = (int(cords[0] + dx), int(cords[1] + dy))
+            neighborCorners = corners.copy()
+            if nextCords in neighborCorners.keys():
+                neighborCorners[nextCords] = True
+            nextState = [nextCords, neighborCorners]
+            hitsWall = self.walls[nextCords[0]][nextCords[1]]
+            if not hitsWall:
+                successors.append((nextState, action, 1))
 
         self._expanded += 1  # DO NOT CHANGE
         return successors
@@ -355,13 +364,13 @@ def cornersHeuristic(state, problem):
     shortest path from the state to a goal of the problem; i.e.  it should be
     admissible (as well as consistent).
     """
-    corners = problem.corners  #These are the corner coordinates
-    walls = problem.walls  #These are the walls of the maze, as a Grid (game.py)
+    cords, cornersDict = state
+    corners = [corner for corner in cornersDict.keys() if not cornersDict[corner]]
     distances = []
     for corner in corners:
-        distances.append(abs(state[0] - corner[0]) + abs(state[1] - corner[1]))
+        distances.append(abs(cords[0] - corner[0]) + abs(cords[1] - corner[1]))
 
-    return min(distances)
+    return sum(distances)
 
 
 class AStarCornersAgent(SearchAgent):

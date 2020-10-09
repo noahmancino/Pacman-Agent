@@ -174,17 +174,20 @@ def uniformCostSearch(problem):
     queue.push((problem.getStartState(), [], 0), 0)
     # We don't need to bother looking at nodes we've already pulled out of the queue, we are guaranteed to have
     # taken the best path to it already.
-    visited = set()
+    visited = [problem.getStartState()]
 
     while not queue.isEmpty():
         current, path, cost = queue.pop()
-        visited.add(current)
         if problem.isGoalState(current):
             return path
 
         for neighbor in problem.getSuccessors(current):
-            if neighbor[0] not in visited:
-                queue.update((neighbor[0], path + [neighbor[1]], cost + neighbor[2]), cost + neighbor[2])
+            neighborState = neighbor[0]
+            neighborPath = path + [neighbor[1]]
+            neighborCost = cost + neighbor[2]
+            if neighborState not in visited:
+                visited.append(neighborState)
+                queue.update((neighborState, neighborPath, neighborCost), neighborCost)
 
     return []
 
@@ -204,20 +207,23 @@ def aStarSearch(problem, heuristic=nullHeuristic):
     queue = PriorityQueue()
     current = problem.getStartState()
     queue.push((current, [], 0), heuristic(current, problem))
-    # We don't need to bother looking at nodes we've already pulled out of the queue, we are guaranteed to have
+    # We don't need to bother looking at nodes we've already pushed into the queue, we are guaranteed to have
     # taken the best path to it already.
-    visited = set()
+    visited = [problem.getStartState()]
 
     while not queue.isEmpty():
         current, path, cost = queue.pop()
-        visited.add(current)
         if problem.isGoalState(current):
             return path
 
         for neighbor in problem.getSuccessors(current):
-            if neighbor[0] not in visited:
-                queue.update((neighbor[0], path + [neighbor[1]], cost + neighbor[2]),
-                             cost + neighbor[2] + heuristic(neighbor[0], problem))
+            neighborState = neighbor[0]
+            neighborPath = path + [neighbor[1]]
+            neighborCost = cost + neighbor[2]
+            if neighborState not in visited:
+                visited.append(neighborState)
+                queue.update((neighborState, neighborPath, neighborCost),
+                             neighborCost + heuristic(neighborState, problem))
 
     return []
 

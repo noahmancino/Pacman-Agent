@@ -517,7 +517,42 @@ class ClosestDotSearchAgent(SearchAgent):
         problem = AnyFoodSearchProblem(gameState)
 
         "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        # from util import manhattanDistance
+        # from util import Queue
+
+        # distances = []
+
+        # foodList = []
+
+        # for i,items in enumerate(food):
+        #     for j,isFood in enumerate(items):
+        #         if isFood:
+        #             foodList.append((i, j))
+        
+        # for item in foodList:
+        #     distances.append(manhattanDistance(startPosition, item))
+
+        # nearestFood = min(distances)
+        # # problem = AnyFoodSearchProblem(gameState, nearestFood)
+
+        # fringe = Queue()
+        # visitedStates = []
+
+        # fringe.push((startPosition, []))
+
+        # while not fringe.isEmpty():
+        #     currState, currPath = fringe.pop()
+
+        #     if problem.isGoalState(currState):
+        #         return currPath
+            
+        #     if currState not in visitedStates:
+        #         successors = problem.getSuccessors()
+        #         for succ in successors:
+        #             newPath = currPath + [succ[1]]
+        #             fringe.push((succ[0], newPath))
+
+        return []
 
 class AnyFoodSearchProblem(PositionSearchProblem):
     """
@@ -544,6 +579,7 @@ class AnyFoodSearchProblem(PositionSearchProblem):
         self.startState = gameState.getPacmanPosition()
         self.costFn = lambda x: 1
         self._visited, self._visitedlist, self._expanded = {}, [], 0 # DO NOT CHANGE
+        # self.goal = goal
 
     def isGoalState(self, state):
         """
@@ -552,8 +588,9 @@ class AnyFoodSearchProblem(PositionSearchProblem):
         """
         x,y = state
 
-        "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        # return True if state == self.goal else False
+        return False
+        
 
 def mazeDistance(point1, point2, gameState):
     """

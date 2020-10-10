@@ -466,27 +466,15 @@ def foodHeuristic(state, problem):
     Subsequent calls to this heuristic can access
     problem.heuristicInfo['wallCount']
     """
-    from util import manhattanDistance
-
     position, foodGrid = state
-
+    "*** YOUR CODE HERE ***"
     distances = []
-    foodList = []
-
-    for i,items in enumerate(foodGrid):
-        for j,isFood in enumerate(items):
+    for x, row in enumerate(foodGrid.data):
+        for y, isFood in enumerate(row):
             if isFood:
-                foodList.append((i, j))
+                distances.append(util.manhattanDistance(position, (x, y)))
 
-    for i in range(len(foodList)):
-        for j in range(len(foodList)):
-            distances.append(manhattanDistance(foodList[i], foodList[j]))
-
-    if not distances:
-        return 0
-
-    return max(distances)
-    # return foodGrid.count()
+    return 0 if not distances else max(distances)
 
 class ClosestDotSearchAgent(SearchAgent):
     "Search for all food using a sequence of searches"

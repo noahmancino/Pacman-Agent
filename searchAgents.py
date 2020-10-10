@@ -370,7 +370,10 @@ def cornersHeuristic(state, problem):
     for corner in corners:
         distances.append(abs(cords[0] - corner[0]) + abs(cords[1] - corner[1]))
 
-    return sum(distances)
+    if not distances:
+        return 0
+
+    return max(distances)
 
 
 class AStarCornersAgent(SearchAgent):
@@ -463,9 +466,27 @@ def foodHeuristic(state, problem):
     Subsequent calls to this heuristic can access
     problem.heuristicInfo['wallCount']
     """
+    from util import manhattanDistance
+
     position, foodGrid = state
-    "*** YOUR CODE HERE ***"
-    return 0
+
+    distances = []
+    foodList = []
+
+    for i,items in enumerate(foodGrid):
+        for j,isFood in enumerate(items):
+            if isFood:
+                foodList.append((i, j))
+
+    for i in range(len(foodList)):
+        for j in range(len(foodList)):
+            distances.append(manhattanDistance(foodList[i], foodList[j]))
+
+    if not distances:
+        return 0
+
+    return max(distances)
+    # return foodGrid.count()
 
 class ClosestDotSearchAgent(SearchAgent):
     "Search for all food using a sequence of searches"

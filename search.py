@@ -158,26 +158,6 @@ def breadthFirstSearch(problem):
 
 def uniformCostSearch(problem):
     """Search the node of least total cost first."""
-    # queue holds a tuple containing the node, the path taken to the node, and the cost to get to the node on that path.
-    # it also holds a priority (annoyingly, the same as the third element of the tuple). Min-heap, not max.
-    # queue = PriorityQueue()
-    # queue.push((problem.getStartState(), [], 0), 0)
-    # # We don't need to bother looking at nodes we've already pulled out of the queue, we are guaranteed to have
-    # # taken the best path to it already.
-    # visited = [problem.getStartState()]
-
-    # while not queue.isEmpty():
-    #     current, path, cost = queue.pop()
-    #     if problem.isGoalState(current):
-    #         return path
-
-    #     for neighbor in problem.getSuccessors(current):
-    #         neighborState = neighbor[0]
-    #         neighborPath = path + [neighbor[1]]
-    #         neighborCost = cost + neighbor[2]
-    #         if neighborState not in visited:
-    #             visited.append(neighborState)
-    #             queue.update((neighborState, neighborPath, neighborCost), neighborCost)
 
     fringe = PriorityQueue()
     statesVisited = []
@@ -210,29 +190,6 @@ def nullHeuristic(state, problem=None):
 
 def aStarSearch(problem, heuristic=nullHeuristic):
     """Search the node that has the lowest combined cost and heuristic first."""
-    "*** YOUR CODE HERE ***"
-    # queue holds a tuple containing the node, the path taken to the node, and the cost to get to the node on that path.
-    # it also holds a priority, which is path cost plus the heuristic. Min-heap, not max.
-    # queue = PriorityQueue()
-    # current = problem.getStartState()
-    # queue.push((current, [], 0), heuristic(current, problem))
-    # # We don't need to bother looking at nodes we've already pushed into the queue, we are guaranteed to have
-    # # taken the best path to it already.
-    # visited = [problem.getStartState()]
-
-    # while not queue.isEmpty():
-    #     current, path, cost = queue.pop()
-    #     if problem.isGoalState(current):
-    #         return path
-
-    #     for neighbor in problem.getSuccessors(current):
-    #         neighborState = neighbor[0]
-    #         neighborPath = path + [neighbor[1]]
-    #         neighborCost = cost + neighbor[2]
-    #         if neighborState not in visited:
-    #             visited.append(neighborState)
-    #             queue.update((neighborState, neighborPath, neighborCost),
-    #                          neighborCost + heuristic(neighborState, problem))
 
     fringe = PriorityQueue()
     statesVisited = []

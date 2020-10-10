@@ -85,39 +85,29 @@ def depthFirstSearch(problem):
     """
     "*** YOUR CODE HERE ***"
 
-    visited = set()
-    path = Stack()
-    directions = []
-    current = problem.getStartState()
+    statesVisited = []
+    fringe = Stack()
+    
+    if problem.isGoalState(problem.getStartState()):
+        return []
 
-    visited.add(current)
-    path.push(current)
+    fringe.push((problem.getStartState(), []))
+    
+    while not fringe.isEmpty():
+        currState, currPath = fringe.pop()
 
-    while not problem.isGoalState(current):
-        neighbors = problem.getSuccessors(current)
-        last = current
-        for neighbor in neighbors:
-            if neighbor[0] not in visited: 
-                current = neighbor[0]
-                directions.append(neighbor[1])
-                visited.add(neighbor[0])
-                path.push(neighbor[0])
-                break
+        if problem.isGoalState(currState):
+            return currPath
 
-        if last != current:
-            continue
-
-        path.pop()
-        if directions:
-            directions.pop()
-            current = path.pop()
-            path.push(current)
-        else:
-            return directions
-
-    return directions
-
-    # util.raiseNotDefined()
+        if (currState not in statesVisited):
+            statesVisited.append(currState)
+            successors = problem.getSuccessors(currState)
+            if successors:
+                for succ in successors:        
+                    newPath = currPath + [succ[1]]
+                    fringe.push((succ[0], newPath))
+    
+    return []
 
 
 def breadthFirstSearch(problem):
@@ -149,19 +139,19 @@ def breadthFirstSearch(problem):
         # if we have found a solution then return
         if problem.isGoalState(currNode):
             return currPath
-        
+
         # now get a list of successors
-        succs = problem.getSuccessors(currNode)
+        successors = problem.getSuccessors(currNode)
 
         # if there are successors
-        if succs:
+        if successors:
             # for every successor found
-            for succNode in succs:
+            for succ in successors:
                 # use successor coords to check against list of visited coords
-                if succNode[0] not in statesVisited:
-                    if succNode not in queue.list:
-                        newResult = currPath + [succNode[1]]
-                        queue.push((succNode[0], newResult))
+                if succ[0] not in statesVisited:
+                    statesVisited.append(succ[0])
+                    newResult = currPath + [succ[1]]
+                    queue.push((succ[0], newResult))
     
     # return empty list if no new path is found && queue isEmpty()
     return []
@@ -170,24 +160,43 @@ def uniformCostSearch(problem):
     """Search the node of least total cost first."""
     # queue holds a tuple containing the node, the path taken to the node, and the cost to get to the node on that path.
     # it also holds a priority (annoyingly, the same as the third element of the tuple). Min-heap, not max.
-    queue = PriorityQueue()
-    queue.push((problem.getStartState(), [], 0), 0)
-    # We don't need to bother looking at nodes we've already pulled out of the queue, we are guaranteed to have
-    # taken the best path to it already.
-    visited = [problem.getStartState()]
+    # queue = PriorityQueue()
+    # queue.push((problem.getStartState(), [], 0), 0)
+    # # We don't need to bother looking at nodes we've already pulled out of the queue, we are guaranteed to have
+    # # taken the best path to it already.
+    # visited = [problem.getStartState()]
 
-    while not queue.isEmpty():
-        current, path, cost = queue.pop()
-        if problem.isGoalState(current):
-            return path
+    # while not queue.isEmpty():
+    #     current, path, cost = queue.pop()
+    #     if problem.isGoalState(current):
+    #         return path
 
-        for neighbor in problem.getSuccessors(current):
-            neighborState = neighbor[0]
-            neighborPath = path + [neighbor[1]]
-            neighborCost = cost + neighbor[2]
-            if neighborState not in visited:
-                visited.append(neighborState)
-                queue.update((neighborState, neighborPath, neighborCost), neighborCost)
+    #     for neighbor in problem.getSuccessors(current):
+    #         neighborState = neighbor[0]
+    #         neighborPath = path + [neighbor[1]]
+    #         neighborCost = cost + neighbor[2]
+    #         if neighborState not in visited:
+    #             visited.append(neighborState)
+    #             queue.update((neighborState, neighborPath, neighborCost), neighborCost)
+
+    fringe = PriorityQueue()
+    statesVisited = []
+
+    fringe.push((problem.getStartState(), [], 0), 0)
+
+    while not fringe.isEmpty():
+        currState, currPath, cost = fringe.pop()
+        
+        if problem.isGoalState(currState):
+            return currPath
+        
+        if currState not in statesVisited:
+            statesVisited.append(currState)
+            successors = problem.getSuccessors(currState)
+            if successors:
+                for succ in successors:
+                    newPath = currPath + [succ[1]]
+                    fringe.update((succ[0], newPath, cost + succ[2]), cost + succ[2])
 
     return []
 
@@ -204,26 +213,45 @@ def aStarSearch(problem, heuristic=nullHeuristic):
     "*** YOUR CODE HERE ***"
     # queue holds a tuple containing the node, the path taken to the node, and the cost to get to the node on that path.
     # it also holds a priority, which is path cost plus the heuristic. Min-heap, not max.
-    queue = PriorityQueue()
-    current = problem.getStartState()
-    queue.push((current, [], 0), heuristic(current, problem))
-    # We don't need to bother looking at nodes we've already pushed into the queue, we are guaranteed to have
-    # taken the best path to it already.
-    visited = [problem.getStartState()]
+    # queue = PriorityQueue()
+    # current = problem.getStartState()
+    # queue.push((current, [], 0), heuristic(current, problem))
+    # # We don't need to bother looking at nodes we've already pushed into the queue, we are guaranteed to have
+    # # taken the best path to it already.
+    # visited = [problem.getStartState()]
 
-    while not queue.isEmpty():
-        current, path, cost = queue.pop()
-        if problem.isGoalState(current):
-            return path
+    # while not queue.isEmpty():
+    #     current, path, cost = queue.pop()
+    #     if problem.isGoalState(current):
+    #         return path
 
-        for neighbor in problem.getSuccessors(current):
-            neighborState = neighbor[0]
-            neighborPath = path + [neighbor[1]]
-            neighborCost = cost + neighbor[2]
-            if neighborState not in visited:
-                visited.append(neighborState)
-                queue.update((neighborState, neighborPath, neighborCost),
-                             neighborCost + heuristic(neighborState, problem))
+    #     for neighbor in problem.getSuccessors(current):
+    #         neighborState = neighbor[0]
+    #         neighborPath = path + [neighbor[1]]
+    #         neighborCost = cost + neighbor[2]
+    #         if neighborState not in visited:
+    #             visited.append(neighborState)
+    #             queue.update((neighborState, neighborPath, neighborCost),
+    #                          neighborCost + heuristic(neighborState, problem))
+
+    fringe = PriorityQueue()
+    statesVisited = []
+
+    fringe.push((problem.getStartState(), [], 0), 0)
+
+    while not fringe.isEmpty():
+        currState, currPath, cost = fringe.pop()
+        
+        if problem.isGoalState(currState):
+            return currPath
+        
+        if currState not in statesVisited:
+            statesVisited.append(currState)
+            successors = problem.getSuccessors(currState)
+            if successors:
+                for succ in successors:
+                    newPath = currPath + [succ[1]]
+                    fringe.update((succ[0], newPath, cost + succ[2]), cost + succ[2] + heuristic(succ[0], problem))
 
     return []
 
